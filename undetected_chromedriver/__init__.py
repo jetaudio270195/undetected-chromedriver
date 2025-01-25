@@ -796,7 +796,14 @@ class Chrome(selenium.webdriver.chrome.webdriver.WebDriver):
                     logger.debug("successfully removed %s" % self.user_data_dir)
                     break
                 time.sleep(0.1)
-
+        try:
+            if self.patcher:
+                os.unlink(self.patcher.executable_path)
+                logger.debug("remove driver's executable")
+            else:
+                logger.debug('no patcher available')
+        except Exception as e:
+            pass
         # dereference patcher, so patcher can start cleaning up as well.
         # this must come last, otherwise it will throw 'in use' errors
         self.patcher = None
